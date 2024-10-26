@@ -13,7 +13,9 @@ const mode = isProduction ? 'production' : 'development';
 // Add any a new entry point by extending the webpack config.
 function defaultBoilerplate( {
 	folders = [ '.' ],
+	srcGlobs,
 	entry,
+	suffix,
 	output,
 	terser = {},
 	loaders = {},
@@ -24,15 +26,26 @@ function defaultBoilerplate( {
 	syncPluginOptions = {},
 	debugPaths = false,
 } ) {
-	const srcDestPaths = folders.flatMap( folder => {
-		const files = glob( `${ folder }/assets/src/{js,scss}/*.{js,scss}` );
+	if ( ! srcGlobs ) {
+		srcGlobs = folders.flatMap( folder => [
+			`${ folder }/assets/src/js/*.js`,
+			`${ folder }/assets/src/scss/*.scss`,
+		] );
+	}
+
+	const srcDestPaths = srcGlobs.flatMap( srcGlob => {
+		const files = glob( srcGlob );
 
 		return files.map( file => {
+			if ( file.match( /\.min\.\w+$/ ) ) {
+				return null;
+			}
+
 			return [
-				file.replace( '/src/', '/dist/' ).replace( '/scss/', '/css/' ).replace( /\.\w+$/, '' ),
+				file.replace( '/src/', '/dist/' ).replace( '/scss/', '/css/' ).replace( /\.\w+$/, '' ) + ( suffix ?? '' ),
 				resolve( process.cwd(), file ),
 			];
-		} );
+		} ).filter( v => v );
 	} );
 
 	if ( debugPaths ) {
