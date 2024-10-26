@@ -11,15 +11,17 @@ const isProduction = process.env.NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
 
 // Add any a new entry point by extending the webpack config.
-module.exports = function( {
-	folders = [ 'mu-plugins/gutenberg', 'plugins/premise-*', 'themes/*' ],
-	serverPath,
-	serverStart,
+function defaultBoilerplate( {
+	folders = [ '.' ],
 	entry,
 	output,
 	terser = {},
 	loaders = {},
-	server = {},
+	syncBaseDir = true,
+	syncStartPath,
+	syncWatchFiles = [ '**/*.{html,min.js,css}' ],
+	syncOptions = {},
+	syncPluginOptions = {},
 	debugPaths = false,
 } ) {
 	const srcDestPaths = folders.flatMap( folder => {
@@ -40,7 +42,6 @@ module.exports = function( {
 	return {
 		mode,
 		entry: entry ?? Object.fromEntries( srcDestPaths ),
-		devtools: false,
 		output: {
 			filename: '[name].js',
 			path: process.cwd(),
@@ -90,12 +91,58 @@ module.exports = function( {
 			new RemoveEmptyScriptsPlugin( {
 				stage: RemoveEmptyScriptsPlugin.STAGE_AFTER_PROCESS_PLUGINS,
 			} ),
-			new BrowserSyncPlugin({
+			new BrowserSyncPlugin( {
 				host: 'localhost',
 				port: 5759,
-				startPath: serverStart ?? '/',
-				server: { baseDir: [ serverPath ] }
-			})
+				startPath: syncStartPath,
+				server: syncBaseDir,
+				files: syncWatchFiles,
+				...syncOptions,
+			}, syncPluginOptions ),
 		],
 	};
+};
+
+function wordpressBoilerplate( {
+	themeId,
+	...config
+} ) {
+	return defaultBoilerplate( {
+		syncStartPath: './mockup/index.html',
+		syncBaseDir: `./themes/${ themeId }`,
+		syncWatchFiles: [
+			// Only watch theme and mockup assets
+			`./themes/${ themeId }/assets/img/**`,
+			`./themes/${ themeId }/assets/dist/css/theme.css`,
+			`./themes/${ themeId }/assets/dist/css/print.css`,
+			`./themes/${ themeId }/assets/dist/css/icons.css`,
+			`./themes/${ themeId }/assets/dist/js/theme.min.js`,
+			`./themes/${ themeId }/mockup/*.html`,
+			`./themes/${ themeId }/mockup/*.css`,
+			`./themes/${ themeId }/mockup/*.js`,
+		],
+		folders: [
+			'mu-plugins/gutenberg',
+			'plugins/premise-*',
+			'themes/*',
+		],
+		...config,
+	} );
+}
+
+module.exports = function( template, config ) {
+	if ( typeof template === 'object' ) {
+		config = template;
+		template = 'default';
+	}
+
+	let boilerplate = defaultBoilerplate;
+
+	switch ( template ) {
+		case 'wordpress':
+			boilerplate = wordpressBoilerplate;
+			break;
+	}
+
+	return boilerplate( config );
 };
