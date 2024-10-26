@@ -9,6 +9,7 @@
 	},
 	"scripts": {
 		"test": "cd test; NODE_ENV=production webpack watch",
+		"test:wordpress": "cd test-wordpress; NODE_ENV=production webpack watch"
 	},
 	"bin": {
 		"premise-webpack": "./bin/webpack.js"

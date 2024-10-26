@@ -1,0 +1,37 @@
+@use 'parts/partial' as *;
+
+@import url('../../imported.css');
+
+@property --percentage {
+	inherits: false;
+	initial-value: 0%;
+	syntax: '<percentage>';
+}
+
+html {
+	color: $color;
+	font-family: sans-serif;
+	margin-top: 10px;
+	margin-left: 20px;
+	margin-bottom: 10px;
+	margin-right: 20px;
+}
+
+body {
+	container-name: test;
+	container-type: inline-size;
+
+	&::before {
+		content: '';
+		display: block;
+		width: 100px;
+		height: 100px;
+		background: url(../../img/logo.svg);
+	}
+}
+
+@container test (max-width: 100px) {
+	p {
+		outline: 1px solid;
+	}
+}
