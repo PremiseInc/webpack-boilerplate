@@ -144,6 +144,23 @@ function wordpressBoilerplate( {
 	} );
 }
 
+function wordpressOldBoilerplate( { themeId, ...config } ) {
+	return wordpressBoilerplate( {
+		themeId,
+		folders: [],
+		srcGlobs: [
+			'mu-plugins/gutenberg/assets/js/src/*.js',
+			'mu-plugins/gutenberg/assets/scss/*.scss',
+			'plugins/premise-*/assets/js/src/*.js',
+			'plugins/premise-*/assets/scss/*.scss',
+			`themes/${ themeId }/assets/js/src/*.js`,
+			`themes/${ themeId }/assets/scss/*.scss`,
+		],
+		suffix: '.min',
+		...config,
+	} );
+}
+
 module.exports = function( template, config ) {
 	if ( typeof template === 'object' ) {
 		config = template;
@@ -155,6 +172,10 @@ module.exports = function( template, config ) {
 	switch ( template ) {
 		case 'wordpress':
 			boilerplate = wordpressBoilerplate;
+			break;
+
+		case 'wordpress-old':
+			boilerplate = wordpressOldBoilerplate;
 			break;
 	}
 

@@ -12,6 +12,8 @@
 		"test/watch": "cd test; NODE_ENV=production webpack watch",
 		"test:wordpress": "cd test-wordpress; NODE_ENV=production webpack build",
 		"test:wordpress/watch": "cd test-wordpress; NODE_ENV=production webpack watch",
+		"test:wordpress-old": "cd test-wordpress-old; NODE_ENV=production webpack build",
+		"test:wordpress-old/watch": "cd test-wordpress-old; NODE_ENV=production webpack watch"
 	},
 	"bin": {
 		"premise-webpack": "./bin/webpack.js"
