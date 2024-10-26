@@ -121,6 +121,12 @@ function wordpressBoilerplate( {
 	...config
 } ) {
 	return defaultBoilerplate( {
+		folders: [
+			'mu-plugins/gutenberg',
+			'plugins/premise-*',
+			`plugins/${ themeId }-*`,
+			`themes/${ themeId }`,
+		],
 		syncStartPath: './mockup/index.html',
 		syncBaseDir: `./themes/${ themeId }`,
 		syncWatchFiles: [
@@ -133,11 +139,6 @@ function wordpressBoilerplate( {
 			`./themes/${ themeId }/mockup/*.html`,
 			`./themes/${ themeId }/mockup/*.css`,
 			`./themes/${ themeId }/mockup/*.js`,
-		],
-		folders: [
-			'mu-plugins/gutenberg',
-			'plugins/premise-*',
-			'themes/*',
 		],
 		...config,
 	} );
