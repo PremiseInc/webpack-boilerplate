@@ -1,1 +1,0 @@
-@import"../imported.css";@property --percentage{inherits:false;initial-value:0%;syntax:"<percentage>"}html{color:blue;font-family:sans-serif;margin:10px 20px}body{container-name:test;container-type:inline-size}body:before{background:url(../img/logo.svg);content:"";display:block;height:100px;width:100px}@container test (max-width: 100px){p{outline:1px solid}}
