@@ -74,6 +74,7 @@ function makeConfig( name, {
 	return {
 		name,
 		mode,
+		devtool: false,
 		entry: entry ?? Object.fromEntries( srcDestPaths ),
 		output: {
 			filename: '[name].js',
