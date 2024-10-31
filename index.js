@@ -178,6 +178,7 @@ function wordpressBoilerplate( {
 			],
 			...sync,
 		},
+		suffix: '.min',
 		...config,
 	} );
 }
