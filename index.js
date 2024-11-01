@@ -74,7 +74,7 @@ function makeConfig( name, {
 	return {
 		name,
 		mode,
-		devtool: false,
+		devtool: isProduction ? 'eval' : false,
 		entry: entry ?? Object.fromEntries( srcDestPaths ),
 		output: {
 			filename: '[name].js',
