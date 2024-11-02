@@ -14,7 +14,6 @@ function makeConfig( name, {
 	srcGlobs,
 	debugPaths = false,
 	entry,
-	suffix,
 	output,
 	terser = {},
 	loaders = {},
@@ -31,7 +30,7 @@ function makeConfig( name, {
 			}
 
 			return [
-				file.replace( '/src/', '/dist/' ).replace( '/scss/', '/css/' ).replace( /\.\w+$/, '' ) + ( suffix ?? '' ),
+				file.replace( '/src/', '/dist/' ).replace( '/scss/', '/css/' ).replace( /\.\w+$/, '' ) + ( file.match( /.js$/ ) ? '.min' : '' ),
 				resolve( process.cwd(), file ),
 			];
 		} ).filter( v => v );
@@ -171,14 +170,13 @@ function wordpressBoilerplate( {
 				`./themes/${ themeId }/assets/dist/css/theme.css`,
 				`./themes/${ themeId }/assets/dist/css/print.css`,
 				`./themes/${ themeId }/assets/dist/css/icons.css`,
-				`./themes/${ themeId }/assets/dist/js/theme.js`,
+				`./themes/${ themeId }/assets/dist/js/theme.min.js`,
 				`./themes/${ themeId }/mockup/*.html`,
 				`./themes/${ themeId }/mockup/*.css`,
 				`./themes/${ themeId }/mockup/*.js`,
 			],
 			...sync,
 		},
-		suffix: '.min',
 		...config,
 	} );
 }
